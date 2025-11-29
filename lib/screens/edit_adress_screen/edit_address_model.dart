@@ -116,7 +116,12 @@ class UpdateAddressResponse {
       'status': status,
       'message': message,
       'data': data.toJson(),
+
     };
+
   }
 
+
+
 }
+

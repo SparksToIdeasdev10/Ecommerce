@@ -1,5 +1,6 @@
 import 'package:ecommerce/screens/add_new_card/add_new_card_screen.dart';
 import 'package:ecommerce/screens/edit_adress_screen/edit_address_controller.dart';
+import 'package:ecommerce/screens/edit_adress_screen/edit_address_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -39,83 +40,320 @@ class _paymentscreenState extends State<paymentscreen> {
     },
 
   ];
+  // Widget _buildCheckoutButton() {
+  //   return GetBuilder<EditAddressController>(
+  //     builder: (controller) {
+  //       return Padding(
+  //         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+  //         child: controller.hasData.value
+  //             ? CustomButton(
+  //           text: "Checkout Now",
+  //           onPressed: () {
+  //             showCheckoutBottomSheet(context);
+  //           },
+  //         )
+  //             : Opacity(
+  //           opacity: 0.6, // Makes it look disabled
+  //           child: CustomButton(
+  //             text: "Checkout Now",
+  //             onPressed: () {
+  //               // Show message when disabled
+  //               Get.snackbar(
+  //                 "Address Required",
+  //                 "Please add your address first",
+  //                 snackPosition: SnackPosition.BOTTOM,
+  //               );
+  //             },
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+  Widget _buildCheckoutButton() {
+    return GetBuilder<EditAddressController>(
+      builder: (controller) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          child: Column(
+            children: [
+              // Debug info
+              Text(
+                "Debug - Has Data: ${controller.hasData.value}, Address: ${controller.addressData.value.shipAddress1}",
+                style: TextStyle(fontSize: 12, color: Colors.grey),
+              ),
+              SizedBox(height: 10),
+              // Button
+              CustomButton(
+                text: "Checkout Now",
+                onPressed: () {
+                  showCheckoutBottomSheet(context);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
+  // Widget _buildAddressSection() {
+  //   return GetBuilder<EditAddressController>(
+  //     init: EditAddressController(),
+  //     builder: (controller) {
+  //       final address = controller.addressData.value;
+  //
+  //       // Fetch address when this section loads
+  //       WidgetsBinding.instance.addPostFrameCallback((_) {
+  //         if (!controller.isLoading.value) {
+  //           controller.fetchUserAddress();
+  //         }
+  //       });
+  //
+  //       return Column(
+  //         crossAxisAlignment: CrossAxisAlignment.start,
+  //         children: [
+  //           Padding(
+  //             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+  //             child: Row(
+  //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //               children: [
+  //                 Text("Address", style: TextStyle(
+  //                     color: Color(0xFF16423C),
+  //                     fontWeight: FontWeight.bold,
+  //                     fontSize: 20
+  //                 )),
+  //                 GestureDetector(
+  //                     onTap: () {
+  //                       Get.to(() => EditAddressScreen());
+  //                     },
+  //                     child: Icon(Icons.edit)
+  //                 )
+  //               ],
+  //             ),
+  //           ),
+  //           SizedBox(height: 20),
+  //
+  //           // Show loading or address data
+  //           if (controller.isLoading.value)
+  //             Padding(
+  //               padding: const EdgeInsets.only(left: 10),
+  //               child: Text("Loading address...", style: TextStyle(fontSize: 16)),
+  //             )
+  //           else
+  //             Column(
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               children: [
+  //                 // Shipping Address Display
+  //                 if (address.shipAddress1 != null && address.shipAddress1!.isNotEmpty)
+  //                   Padding(
+  //                     padding: const EdgeInsets.only(left: 10),
+  //                     child: Text("${address.shipAddress1}", style: TextStyle(fontSize: 16)),
+  //                   ),
+  //                 if (address.shipAddress2 != null && address.shipAddress2!.isNotEmpty)
+  //                   Padding(
+  //                     padding: const EdgeInsets.only(left: 10),
+  //                     child: Text("${address.shipAddress2}", style: TextStyle(fontSize: 16)),
+  //                   ),
+  //                 if (address.shipCity != null && address.shipCity!.isNotEmpty)
+  //                   Padding(
+  //                     padding: const EdgeInsets.only(left: 10),
+  //                     child: Text(
+  //                         "${address.shipCity}${address.shipZip != null && address.shipZip!.isNotEmpty ? ', ${address.shipZip}' : ''}",
+  //                         style: TextStyle(fontSize: 16)
+  //                     ),
+  //                   ),
+  //                 if (address.shipCountry != null && address.shipCountry!.isNotEmpty)
+  //                   Padding(
+  //                     padding: const EdgeInsets.only(left: 10),
+  //                     child: Text("${address.shipCountry}", style: TextStyle(fontSize: 16)),
+  //                   ),
+  //               ],
+  //             ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
+
+  // In paymentscreen.dart
+  // Widget _buildAddressSection() {
+  //   return GetBuilder<EditAddressController>(
+  //     init: EditAddressController(),
+  //     builder: (controller) {
+  //       return Obx(() {
+  //         // Fetch address on first load
+  //         if (!controller.hasShownSnackbar.value) {
+  //           WidgetsBinding.instance.addPostFrameCallback((_) {
+  //             controller.fetchUserAddress();
+  //           });
+  //         }
+  //
+  //         return Column(
+  //           crossAxisAlignment: CrossAxisAlignment.start,
+  //           children: [
+  //             Padding(
+  //               padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+  //               child: Row(
+  //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                 children: [
+  //                   Text(
+  //                       "Address",
+  //                       style: TextStyle(
+  //                           color: Color(0xFF16423C),
+  //                           fontWeight: FontWeight.bold,
+  //                           fontSize: 20
+  //                       )
+  //                   ),
+  //                   GestureDetector(
+  //                       onTap: () {
+  //                         Get.to(() => EditAddressScreen());
+  //                       },
+  //                       child: Icon(Icons.edit)
+  //                   )
+  //                 ],
+  //               ),
+  //             ),
+  //             SizedBox(height: 20),
+  //
+  //             if (controller.isLoading.value)
+  //               Padding(
+  //                 padding: const EdgeInsets.only(left: 10),
+  //                 child: Text("Loading address...", style: TextStyle(fontSize: 16)),
+  //               )
+  //             else if (controller.hasData.value)
+  //               _buildAddressDisplay(controller.addressData.value)
+  //             else
+  //               Padding(
+  //                 padding: const EdgeInsets.only(left: 10),
+  //                 child: Text(
+  //                   "No address found. Please update your address.",
+  //                   style: TextStyle(fontSize: 16, color: Colors.red),
+  //                 ),
+  //               ),
+  //           ],
+  //         );
+  //       });
+  //     },
+  //   );
+  // }
   Widget _buildAddressSection() {
     return GetBuilder<EditAddressController>(
       init: EditAddressController(),
       builder: (controller) {
-        final address = controller.addressData.value;
-
-        // Fetch address when this section loads
+        // Fetch address when controller initializes
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (!controller.isLoading.value) {
-            controller.fetchUserAddress();
-          }
+          controller.fetchUserAddress();
         });
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Address", style: TextStyle(
-                      color: Color(0xFF16423C),
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20
-                  )),
-                  GestureDetector(
-                      onTap: () {
-                        Get.to(() => EditAddressScreen());
-                      },
-                      child: Icon(Icons.edit)
-                  )
-                ],
-              ),
-            ),
-            SizedBox(height: 20),
+        return Obx(() {
+          final address = controller.addressData.value;
 
-            // Show loading or address data
-            if (controller.isLoading.value)
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
               Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Text("Loading address...", style: TextStyle(fontSize: 16)),
-              )
-            else
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Shipping Address Display
-                  if (address.shipAddress1 != null && address.shipAddress1!.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: Text("${address.shipAddress1}", style: TextStyle(fontSize: 16)),
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                        "Address",
+                        style: TextStyle(
+                            color: Color(0xFF16423C),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20
+                        )
                     ),
-                  if (address.shipAddress2 != null && address.shipAddress2!.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: Text("${address.shipAddress2}", style: TextStyle(fontSize: 16)),
-                    ),
-                  if (address.shipCity != null && address.shipCity!.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: Text(
-                          "${address.shipCity}${address.shipZip != null && address.shipZip!.isNotEmpty ? ', ${address.shipZip}' : ''}",
-                          style: TextStyle(fontSize: 16)
-                      ),
-                    ),
-                  if (address.shipCountry != null && address.shipCountry!.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: Text("${address.shipCountry}", style: TextStyle(fontSize: 16)),
-                    ),
-                ],
+                    GestureDetector(
+                        onTap: () {
+                          Get.to(() => EditAddressScreen());
+                        },
+                        child: Icon(Icons.edit)
+                    )
+                  ],
+                ),
               ),
-          ],
-        );
+              SizedBox(height: 20),
+
+              if (controller.isLoading.value)
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Text("Loading address...", style: TextStyle(fontSize: 16)),
+                )
+              else if (address.shipAddress1 != null && address.shipAddress1!.isNotEmpty)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Shipping Address Display
+                    if (address.shipAddress1 != null && address.shipAddress1!.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: Text("${address.shipAddress1}", style: TextStyle(fontSize: 16)),
+                      ),
+                    if (address.shipAddress2 != null && address.shipAddress2!.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: Text("${address.shipAddress2}", style: TextStyle(fontSize: 16)),
+                      ),
+                    if (address.shipCity != null && address.shipCity!.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: Text(
+                            "${address.shipCity}${address.shipZip != null && address.shipZip!.isNotEmpty ? ', ${address.shipZip}' : ''}",
+                            style: TextStyle(fontSize: 16)
+                        ),
+                      ),
+                    if (address.shipCountry != null && address.shipCountry!.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: Text("${address.shipCountry}", style: TextStyle(fontSize: 16)),
+                      ),
+                  ],
+                )
+              else
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Text(
+                    "No address found. Please update your address.",
+                    style: TextStyle(fontSize: 16, color: Colors.red),
+                  ),
+                ),
+            ],
+          );
+        });
       },
+    );
+  }
+
+  Widget _buildAddressDisplay(AddressData address) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (address.shipAddress1 != null && address.shipAddress1!.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: Text("${address.shipAddress1}", style: TextStyle(fontSize: 16)),
+          ),
+        if (address.shipAddress2 != null && address.shipAddress2!.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: Text("${address.shipAddress2}", style: TextStyle(fontSize: 16)),
+          ),
+        if (address.shipCity != null && address.shipCity!.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: Text(
+                "${address.shipCity}${address.shipZip != null && address.shipZip!.isNotEmpty ? ', ${address.shipZip}' : ''}",
+                style: TextStyle(fontSize: 16)
+            ),
+          ),
+        if (address.shipCountry != null && address.shipCountry!.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: Text("${address.shipCountry}", style: TextStyle(fontSize: 16)),
+          ),
+      ],
     );
   }
   Widget _buildPaymentOption({
@@ -797,19 +1035,21 @@ class _paymentscreenState extends State<paymentscreen> {
 
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0,vertical: 8.0), // Match left padding
-              child: CustomButton(
-                text: "Checkout Now",
-                onPressed: () {
-                  showCheckoutBottomSheet(context);
-                  // Get.to(editaddressscreen());
-                  // Add your button action here
-                  print("Get Started button pressed!");
-                  // You can add navigation or other logic here
-                },
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 16.0,vertical: 8.0), // Match left padding
+            //   child: CustomButton(
+            //     text: "Checkout Now",
+            //     onPressed: () {
+            //       showCheckoutBottomSheet(context);
+            //       // Get.to(editaddressscreen());
+            //       // Add your button action here
+            //       print("Get Started button pressed!");
+            //       // You can add navigation or other logic here
+            //     },
+            //   ),
+            // ),
+            _buildCheckoutButton(),
+
             ])
     )
     );

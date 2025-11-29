@@ -309,23 +309,9 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
           SizedBox(height: Get.height * 0.02),
 
           // Shipping Company
-          _buildLabel("Company (Optional)", themeColor),
-          SizedBox(height: Get.height * 0.01),
-          CustomTextField(
-            controller: _controller.shipCompanyController,
-            hintText: 'Enter company name',
-            obscureText: false,
-            borderColor: Colors.grey[300]!,
-            focusedBorderColor: themeColor,
-            isRequired: false,
-            borderRadius: 25,
-            suffixIcon: Icon(Icons.edit_outlined),
-          ),
+
           SizedBox(height: Get.height * 0.04),
 
-          // Billing Address Section
-          _buildSectionHeader("Billing Address", themeColor),
-          SizedBox(height: Get.height * 0.02),
 
           // Billing Address Line 1
           _buildLabel("Billing Address Line 1", themeColor),
@@ -343,18 +329,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
           SizedBox(height: Get.height * 0.02),
 
           // Billing Address Line 2
-          _buildLabel("Billing Address Line 2", themeColor),
-          SizedBox(height: Get.height * 0.01),
-          CustomTextField(
-            controller: _controller.billAddress2Controller,
-            hintText: 'Enter billing address line 2',
-            obscureText: false,
-            borderColor: Colors.grey[300]!,
-            focusedBorderColor: themeColor,
-            isRequired: false,
-            borderRadius: 25,
-            suffixIcon: Icon(Icons.edit_outlined),
-          ),
+
           SizedBox(height: Get.height * 0.02),
 
           // Billing Zip Code
@@ -403,20 +378,21 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
           SizedBox(height: Get.height * 0.02),
 
           // Billing Company
-          _buildLabel("Company (Optional)", themeColor),
-          SizedBox(height: Get.height * 0.01),
-          CustomTextField(
-            controller: _controller.billCompanyController,
-            hintText: 'Enter company name',
-            obscureText: false,
-            borderColor: Colors.grey[300]!,
-            focusedBorderColor: themeColor,
-            isRequired: false,
-            borderRadius: 25,
-            suffixIcon: Icon(Icons.edit_outlined),
-          ),
+
           SizedBox(height: Get.height * 0.06),
 
+          // Save Button
+          // Obx(() => _controller.isLoading.value
+          //     ? Center(
+          //   child: CircularProgressIndicator(),
+          // )
+          //     : CustomButton(
+          //   text: "Save Address",
+          //   onPressed: () {
+          //   //  _controller.updateUserAddress();
+          //   },
+          // ),
+          // ),
           // Save Button
           Obx(() => _controller.isLoading.value
               ? Center(
@@ -425,7 +401,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
               : CustomButton(
             text: "Save Address",
             onPressed: () {
-            //  _controller.updateUserAddress();
+              _controller.updateUserAddress(); // <-- UNCOMMENT THIS LINE
             },
           ),
           ),
