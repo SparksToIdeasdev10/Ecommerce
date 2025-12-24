@@ -23,6 +23,8 @@ class apiservicess {
 
       print("📡 API Response received:");
       print("Status Code: ${response.statusCode}");
+
+
       print("Response Data: ${response.data}");
 
       if (response.statusCode == 200) {

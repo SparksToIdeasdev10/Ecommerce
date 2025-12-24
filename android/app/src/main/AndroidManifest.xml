@@ -65,13 +65,13 @@
 
     <application
         android:name="${applicationName}"
-        android:label="ecommerce"
+        android:label="Sparks E-Commerce"
         android:icon="@mipmap/ic_launcher">
 
         <!-- ✅ Only one Google Maps API key entry -->
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="YOUR_REAL_API_KEY_HERE" />
+<!--        <meta-data-->
+<!--            android:name="com.google.android.geo.API_KEY"-->
+<!--            android:value="YOUR_REAL_API_KEY_HERE" />-->
 
         <activity
             android:name=".MainActivity"

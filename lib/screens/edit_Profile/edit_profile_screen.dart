@@ -228,42 +228,44 @@ class _editprofilescreenState extends State<editprofilescreen> {
           child: Icon(Icons.arrow_back,color: Colors.white,)),
       backgroundColor: Color(0xFF16423C),
       title: Text("Edit Profile",style: TextStyle(color: Colors.white),),),
-      body: Column(
-        children: [
-          Stack(
-            clipBehavior: Clip.none,
-            children: [
-              Center(
-                child: Padding(
-                  padding: EdgeInsets.only(top: Get.height * 0.03),
-                  child: CircleAvatar(
-                    radius: 60,
-                    backgroundImage: AssetImage("assets/images/editimage.png"),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Center(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: Get.height * 0.03),
+                    child: CircleAvatar(
+                      radius: 60,
+                      backgroundImage: AssetImage("assets/images/editimage.png"),
+                    ),
                   ),
                 ),
-              ),
-
-              Positioned(
-                //top: 100,
-                top: Get.width * 0.25,
-                  //right: 160,
-                  right: Get.width * 0.38,
-                  child: CircleAvatar(
-                    backgroundColor: Color(0xFF16423C),
-                      child: Icon(Icons.camera_alt_outlined,color: Colors.white,)))
-            ],
-          ),
-          SizedBox(height: 40,),
-          // Padding(
-          //   padding: const EdgeInsets.only(top: 50,left: 10),
-          //   child: Text("Card Number",style: TextStyle(color: Color(0xFF16423C),
-          //       fontWeight: FontWeight.bold,fontSize: 20),),
-          // ),
-          Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: _buildRegisterTab(Color((0xFF004643))),
-          )
-        ],
+        
+                Positioned(
+                  //top: 100,
+                  top: Get.width * 0.25,
+                    //right: 160,
+                    right: Get.width * 0.38,
+                    child: CircleAvatar(
+                      backgroundColor: Color(0xFF16423C),
+                        child: Icon(Icons.camera_alt_outlined,color: Colors.white,)))
+              ],
+            ),
+            SizedBox(height: 40,),
+            // Padding(
+            //   padding: const EdgeInsets.only(top: 50,left: 10),
+            //   child: Text("Card Number",style: TextStyle(color: Color(0xFF16423C),
+            //       fontWeight: FontWeight.bold,fontSize: 20),),
+            // ),
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: _buildRegisterTab(Color((0xFF004643))),
+            )
+          ],
+        ),
       ),
     );
   }

@@ -111,30 +111,108 @@
 // }
 //
 //
+// import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+// import 'package:flutter/material.dart';
+// import 'package:get/get.dart';
+// import '../My_order/my_order_screen.dart';
+// import '../dashboard/dashboard_screen.dart';
+// import '../payment_screeen/order_details_screens/my_order_screen.dart';
+// import '../profile/profile_screen.dart';
+// import '../search/search_screen.dart';
+//
+// class BottomNavScreen extends StatelessWidget {
+//   final int initialIndex; // 👈 to open specific tab
+//   const BottomNavScreen({super.key, this.initialIndex = 0});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     final NavController navController = Get.put(NavController());
+//     //navController.selectedIndex.value = initialIndex;
+//
+//     // ✅ Initialize the index safely using post-frame callback
+//     WidgetsBinding.instance.addPostFrameCallback((_) {
+//       if (navController.selectedIndex.value != initialIndex) {
+//         navController.selectedIndex.value = initialIndex;
+//       }
+//     });
+//
+//     final List<Widget> pages = [
+//       const HomeScreen(),
+//       const SearchScreen(),
+//       const Center(child: Text("Cart Screen")), // replace with your cart screen
+//      // const MyOrderScreen(),
+//       const MyOrderScreen(),
+//       const profilescreen(),
+//     ];
+//
+//     return Obx(() => Scaffold(
+//       body: IndexedStack(
+//         index: navController.selectedIndex.value,
+//         children: pages,
+//       ),
+//       bottomNavigationBar: ConvexAppBar(
+//         style: TabStyle.flip,
+//         backgroundColor: const Color(0xFF16423C),
+//         color: Colors.white70,
+//         activeColor: Colors.white,
+//         items: const [
+//           TabItem(icon: Icons.home, title: 'Home'),
+//           TabItem(icon: Icons.search, title: 'Search'),
+//           TabItem(icon: Icons.shopping_bag, title: 'Cart'),
+//           TabItem(icon: Icons.shopping_basket, title: 'Orders'),
+//           TabItem(icon: Icons.person, title: 'Profile'),
+//         ],
+//         initialActiveIndex: navController.selectedIndex.value,
+//         onTap: (i) => navController.changeTab(i),
+//       ),
+//     ));
+//   }
+// }
+//
+//
+//
+//
+// class NavController extends GetxController {
+//   var selectedIndex = 0.obs;
+//
+//   void changeTab(int index) {
+//     selectedIndex.value = index;
+//   }
+// }
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../My_order/my_order_screen.dart';
 import '../dashboard/dashboard_screen.dart';
+import '../payment_screeen/order_details_screens/my_order_screen.dart';
 import '../profile/profile_screen.dart';
 import '../search/search_screen.dart';
 
-class BottomNavScreen extends StatelessWidget {
+class BottomNavScreen extends StatefulWidget {
   final int initialIndex; // 👈 to open specific tab
   const BottomNavScreen({super.key, this.initialIndex = 0});
 
   @override
+  State<BottomNavScreen> createState() => _BottomNavScreenState();
+}
+
+class _BottomNavScreenState extends State<BottomNavScreen> {
+  late NavController navController;
+
+  @override
+  void initState() {
+    super.initState();
+    // Always create a fresh controller or reset existing one
+    if (Get.isRegistered<NavController>()) {
+      Get.delete<NavController>(); // Remove old controller
+    }
+    navController = Get.put(NavController());
+    // Set initial index
+    navController.selectedIndex.value = widget.initialIndex;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final NavController navController = Get.put(NavController());
-    //navController.selectedIndex.value = initialIndex;
-
-    // ✅ Initialize the index safely using post-frame callback
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (navController.selectedIndex.value != initialIndex) {
-        navController.selectedIndex.value = initialIndex;
-      }
-    });
-
     final List<Widget> pages = [
       const HomeScreen(),
       const SearchScreen(),
@@ -166,9 +244,6 @@ class BottomNavScreen extends StatelessWidget {
     ));
   }
 }
-
-
-
 
 class NavController extends GetxController {
   var selectedIndex = 0.obs;

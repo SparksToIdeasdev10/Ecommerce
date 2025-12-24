@@ -948,27 +948,41 @@ class _categoryscreenState extends State<categoryscreen> {
 
     return Scaffold(
 
+      // appBar: AppBar(
+      //   backgroundColor: const Color(0xFF16423C),
+      //
+      //   leading: IconButton(
+      //     icon: const Icon(Icons.arrow_back, color: Colors.white),
+      //     onPressed: () {
+      //       Navigator.pop(context);
+      //     },
+      //   ),
+      //   title: Obx(() {
+      //     if (selectedCategoryId != null && categoryController.subcategoryresponse.value.data.category.name.isNotEmpty) {
+      //       return Text(
+      //         categoryController.subcategoryresponse.value.data.category.name,
+      //         style: const TextStyle(color: Colors.white),
+      //       );
+      //     }
+      //     return const Text(
+      //       'Category',
+      //       style: TextStyle(color: Colors.white),
+      //     );
+      //   }),
+      //   centerTitle: true,
+      // ),
       appBar: AppBar(
         backgroundColor: const Color(0xFF16423C),
-        elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            Navigator.pop(context);
+            Get.back();
           },
         ),
-        title: Obx(() {
-          if (selectedCategoryId != null && categoryController.subcategoryresponse.value.data.category.name.isNotEmpty) {
-            return Text(
-              categoryController.subcategoryresponse.value.data.category.name,
-              style: const TextStyle(color: Colors.white),
-            );
-          }
-          return const Text(
-            'Category',
-            style: TextStyle(color: Colors.white),
-          );
-        }),
+        title: const Text(
+          'Categories',
+          style: TextStyle(color: Colors.white),
+        ),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -1022,17 +1036,19 @@ class _categoryscreenState extends State<categoryscreen> {
                           backgroundImage: NetworkImage(category.photo),
                         ),
                         SizedBox(height: height * 0.01),
-                        SizedBox(
-                          width: 70,
-                          child: Text(
-                            category.name,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 12,
+                        Expanded(
+                          child: SizedBox(
+                            width: 70,
+                            child: Text(
+                              category.name,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 12,
+                              ),
+                              textAlign: TextAlign.center,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                             ),
-                            textAlign: TextAlign.center,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ],

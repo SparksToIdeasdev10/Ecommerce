@@ -1391,6 +1391,7 @@ import 'package:ecommerce/screens/products/product_controller.dart';
 import 'package:ecommerce/screens/search/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'banners_model.dart';
 
@@ -1453,7 +1454,11 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications_none, color: Colors.white),
-            onPressed: () {
+            onPressed: ()async {
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              final token= await prefs.getString('token');
+
+              print("$token}");
               Navigator.push(context, MaterialPageRoute(builder: (context)=>WishlistScreen()));
             },
           ),

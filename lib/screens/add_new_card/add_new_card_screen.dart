@@ -4,15 +4,28 @@ import 'package:get/get.dart';
 import '../../customs/buttonscreen.dart';
 import '../../customs/textfields.dart';
 import '../My_order/my_order_screen.dart';
+import '../payment_screeen/order_details_screens/my_order_screen.dart';
 
-class addnewcard extends StatelessWidget {
+class addnewcard extends StatefulWidget {
+  
 
 
  addnewcard({super.key});
+ 
+
+  @override
+  State<addnewcard> createState() => _addnewcardState();
+}
+
+class _addnewcardState extends State<addnewcard> {
   final themeColor = const Color(0xFF004643);
+
   final TextEditingController cardController = TextEditingController();
+
   final TextEditingController cardholderController = TextEditingController();
+
   final TextEditingController expiryontroller = TextEditingController();
+
   final TextEditingController CVVController = TextEditingController();
 
   @override

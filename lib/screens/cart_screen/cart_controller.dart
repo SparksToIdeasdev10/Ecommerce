@@ -166,18 +166,182 @@
 // }
 
 // cart_controller.dart
+//main hai aaj ka
+// import 'package:ecommerce/screens/cart_screen/cart_apiservice.dart';
+// import 'package:ecommerce/screens/cart_screen/cart_model.dart';
+// import 'package:flutter/material.dart';
+// import 'package:get/get.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
+//
+// class CartController extends GetxController {
+//   var isLoading = false.obs;
+//   var cartItems = <CartItem>[].obs;
+//   var itemCount = 0.obs;
+//   var totalAmount = 0.0.obs;
+//
+//   final CartApiService _cartApiService = CartApiService();
+//
+//   Future<String?> getToken() async {
+//     try {
+//       SharedPreferences prefs = await SharedPreferences.getInstance();
+//       String? token = prefs.getString('token');
+//       print("🔑 Retrieved token for cart: $token");
+//       return token;
+//     } catch (e) {
+//       print("❌ Error getting token: $e");
+//       return null;
+//     }
+//   }
+//
+//   Future<void> fetchCartItems() async {
+//     try {
+//       isLoading.value = true;
+//       String? token = await getToken();
+//
+//       if (token == null || token.isEmpty) {
+//         print("❌ No token available for cart");
+//         isLoading.value = false;
+//         return;
+//       }
+//
+//       print("🔄 Fetching cart items...");
+//       final response = await _cartApiService.getCartItems(token);
+//
+//       if (response.status == true) {
+//         cartItems.value = response.data;
+//         print("${cartItems}");
+//         itemCount.value = response.count;
+//         print("🎉 Cart items loaded successfully! Count: ${itemCount.value}");
+//       } else {
+//         print("❌ Failed to load cart items");
+//         cartItems.value = [];
+//         itemCount.value = 0;
+//       }
+//     } catch (e) {
+//       isLoading.value = false;
+//       print("❌ Error in fetchCartItems: $e");
+//       Get.snackbar(
+//         'Error',
+//         'Failed to load cart items: $e',
+//         backgroundColor: Colors.red,
+//         colorText: Colors.white,
+//       );
+//     } finally {
+//       isLoading.value = false;
+//     }
+//   }
+//
+//
+//   Future<String?> _getToken() async {
+//     try {
+//       SharedPreferences prefs = await SharedPreferences.getInstance();
+//       return prefs.getString('token');
+//     } catch (e) {
+//       print("❌ Error getting token: $e");
+//       return null;
+//     }
+//   }
+//
+// //cart update controller
+// //   Future<void> updateQuantity(int cartId, int newQuantity) async {
+// //     try {
+// //       if (newQuantity <= 0) {
+// //         await removeFromCart(cartId);
+// //         return;
+// //       }
+// //
+// //       String? token = await _getToken();
+// //       if (token == null) return;
+// //
+// //       await _cartApiService.updateCartQuantity(token, cartId, newQuantity);
+// //       // Refresh the cart
+// //       fetchCartItems();
+// //     } catch (e) {
+// //       print("❌ Error updating quantity: $e");
+// //     }
+// //   }
+//
+//   Future<void> updateQuantity(int cartId, int newQuantity) async {
+//     try {
+//       if (newQuantity <= 0) {
+//         await removeFromCart(cartId);
+//         return;
+//       }
+//
+//       String? token = await _getToken();
+//       if (token == null) return;
+//
+//       await _cartApiService.updateCartQuantity(token, cartId, newQuantity);
+//       // Refresh the cart
+//       fetchCartItems();
+//     } catch (e) {
+//       print("❌ Error updating quantity: $e");
+//     }
+//   }
+//
+//   // Future<void> removeFromCart(int cartId) async {
+//   //   try {
+//   //     String? token = await _getToken();
+//   //     if (token == null) return;
+//   //
+//   //     await _cartApiService.removeFromCart(token, cartId);
+//   //     // Refresh the cart
+//   //     fetchCartItems();
+//   //   } catch (e) {
+//   //     print("❌ Error removing from cart: $e");
+//   //   }
+//   // }
+//
+//
+// //remove cart
+//
+//
+//
+//
+// // Remove item from cart
+//   Future<void> removeFromCart(int cartId) async {
+//     try {
+//       String? token = await _getToken();
+//       if (token == null) {
+//         print("❌ No token available for cart removal");
+//         return;
+//       }
+//
+//       print("🗑️ Removing cart item with ID: $cartId");
+//       await _cartApiService.removeFromCart(token, cartId);
+//
+//       // Refresh the cart
+//       await fetchCartItems();
+//
+//       print("✅ Cart item removed successfully");
+//
+//     } catch (e) {
+//       print("❌ Error removing from cart: $e");
+//       Get.snackbar(
+//         'Error',
+//         'Failed to remove item from cart: $e',
+//         backgroundColor: Colors.red,
+//         colorText: Colors.white,
+//       );
+//     }
+//   }
+// }
+
+//just updated 24-12-25
 
 import 'package:ecommerce/screens/cart_screen/cart_apiservice.dart';
-import 'package:ecommerce/screens/cart_screen/cart_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'cart_model.dart';
 
 class CartController extends GetxController {
   var isLoading = false.obs;
   var cartItems = <CartItem>[].obs;
   var itemCount = 0.obs;
   var totalAmount = 0.0.obs;
+  var totalAmountWithAttributes = 0.0.obs; // ADD THIS
 
   final CartApiService _cartApiService = CartApiService();
 
@@ -209,13 +373,19 @@ class CartController extends GetxController {
 
       if (response.status == true) {
         cartItems.value = response.data;
-        print("${cartItems}");
         itemCount.value = response.count;
+
+        // Calculate totals
+        calculateTotals();
+
         print("🎉 Cart items loaded successfully! Count: ${itemCount.value}");
+        print("📊 Total amount with attributes: ${totalAmountWithAttributes.value}");
       } else {
         print("❌ Failed to load cart items");
         cartItems.value = [];
         itemCount.value = 0;
+        totalAmount.value = 0.0;
+        totalAmountWithAttributes.value = 0.0;
       }
     } catch (e) {
       isLoading.value = false;
@@ -231,7 +401,21 @@ class CartController extends GetxController {
     }
   }
 
+  // Calculate total amounts
+  void calculateTotals() {
+    double baseTotal = 0.0;
+    double totalWithAttributes = 0.0;
 
+    for (var item in cartItems) {
+      baseTotal += item.totalPrice;
+      totalWithAttributes += item.totalPriceWithAttributes;
+    }
+
+    totalAmount.value = baseTotal;
+    totalAmountWithAttributes.value = totalWithAttributes;
+  }
+
+  // Rest of your controller methods remain the same...
   Future<String?> _getToken() async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -241,25 +425,6 @@ class CartController extends GetxController {
       return null;
     }
   }
-
-//cart update controller
-//   Future<void> updateQuantity(int cartId, int newQuantity) async {
-//     try {
-//       if (newQuantity <= 0) {
-//         await removeFromCart(cartId);
-//         return;
-//       }
-//
-//       String? token = await _getToken();
-//       if (token == null) return;
-//
-//       await _cartApiService.updateCartQuantity(token, cartId, newQuantity);
-//       // Refresh the cart
-//       fetchCartItems();
-//     } catch (e) {
-//       print("❌ Error updating quantity: $e");
-//     }
-//   }
 
   Future<void> updateQuantity(int cartId, int newQuantity) async {
     try {
@@ -279,26 +444,6 @@ class CartController extends GetxController {
     }
   }
 
-  // Future<void> removeFromCart(int cartId) async {
-  //   try {
-  //     String? token = await _getToken();
-  //     if (token == null) return;
-  //
-  //     await _cartApiService.removeFromCart(token, cartId);
-  //     // Refresh the cart
-  //     fetchCartItems();
-  //   } catch (e) {
-  //     print("❌ Error removing from cart: $e");
-  //   }
-  // }
-
-
-//remove cart
-
-
-
-
-// Remove item from cart
   Future<void> removeFromCart(int cartId) async {
     try {
       String? token = await _getToken();

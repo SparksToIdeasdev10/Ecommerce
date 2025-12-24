@@ -46,6 +46,7 @@ class EditProfileController extends GetxController {
       // Call the API service
       final profileResponse = await apiservices().fetchprofile(token ?? "");
 
+
       if (profileResponse.status) {
         final user = profileResponse.data;
         String fullname =user.firstName+user.lastName;
@@ -61,6 +62,26 @@ class EditProfileController extends GetxController {
         fullnameController.text = user.fullName;
         mobileController.text = user.phone;
         emailController.text = user.email;
+
+
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+        // Save all user data
+        await prefs.setString('user_id', user.id.toString());
+        await prefs.setString('user_firstname', user.firstName);
+        await prefs.setString('user_lastname', user.lastName);
+        await prefs.setString('user_fullname', user.fullName);
+        await prefs.setString('user_email', user.email);
+        await prefs.setString('user_phone', user.phone);
+        await prefs.setInt('user_email_verified', user.emailVerify);
+        await prefs.setBool('has_user_profile', true);
+
+        print("✅ User data saved to SharedPreferences:");
+        print("✅ User data saved to ${prefs.getString('user_firstname')}");
+        print("✅ User data saved to SharedPreferences:");
+        print("✅ User data saved to SharedPreferences:");
+
+
 
         Get.snackbar("Success", "Profile loaded successfully!");
       } else {
