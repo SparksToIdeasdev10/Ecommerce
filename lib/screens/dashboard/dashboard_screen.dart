@@ -1459,9 +1459,14 @@ class _HomeScreenState extends State<HomeScreen> {
               final token= await prefs.getString('token');
 
               print("$token}");
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>WishlistScreen()));
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>notificationscreen()));
+
             },
           ),
+          InkWell(onTap: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>WishlistScreen()));
+          },
+              child: Icon(Icons.favorite,color: Colors.white,))
         ],
         title: const Text(''),
       ),
